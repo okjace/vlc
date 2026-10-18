@@ -1,9 +1,9 @@
 # Builds VLC Redesign installers for every platform.
 #
-#   Linux   x86_64  -> AppImage (AppImageLauncher integration disabled)
-#   Windows x86_64  -> NSIS .exe installer (+ portable .zip)
-#   macOS   x86_64  -> .app in a custom .dmg (+ .app.zip)
-#   macOS   arm64   -> .app in a custom .dmg (+ .app.zip)
+#   Linux   x86_64  -> self-installing AppImage (setup wizard, bypasses AppImageLauncher)
+#   Windows x86_64  -> NSIS Setup .exe (+ portable .zip)
+#   macOS   x86_64  -> self-installing VLC Redesign.app (zipped)
+#   macOS   arm64   -> self-installing VLC Redesign.app (zipped)
 #
 # Pushing a tag named v* (or running the workflow manually with a tag)
 # publishes everything as a GitHub Release.
@@ -59,6 +59,26 @@ jobs:
         env:
           OUT_DIR: ${{ github.workspace }}/out
 
+      - name: Test the AppImage and its setup wizard
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: "1"
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          set -x
+          img="$(ls out/*.AppImage)"
+          # AppImageLauncher must not be able to grab it: magic bytes cleared
+          [ "$(xxd -s 8 -l 3 -p "$img")" = "000000" ]
+          VLC_REDESIGN_NO_SETUP=1 "$img" --version | grep "VLC version"
+          export HOME="$RUNNER_TEMP/home" && mkdir -p "$HOME"
+          "$img" --install --yes
+          test -x "$HOME/Applications/VLC-Redesign.AppImage"
+          grep -q 'APPIMAGELAUNCHER_DISABLE=1' "$HOME/.local/share/applications/io.github.okjace.vlc_redesign.desktop"
+          test -x "$HOME/.local/bin/vlc-redesign"
+          "$HOME/.local/bin/vlc-redesign" --uninstall --yes
+          test ! -e "$HOME/Applications/VLC-Redesign.AppImage"
+          test ! -e "$HOME/.local/share/applications/io.github.okjace.vlc_redesign.desktop"
+          echo "LINUX INSTALLER OK"
+
       - uses: actions/upload-artifact@v4
         with:
           name: vlc-redesign-linux-x86_64
@@ -66,7 +86,7 @@ jobs:
           if-no-files-found: error
 
   windows:
-    name: Windows x86_64 (.exe installer)
+    name: Windows x86_64 (Setup .exe)
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows')
     runs-on: ubuntu-24.04
     timeout-minutes: 240
@@ -91,8 +111,8 @@ jobs:
           extras/package/win32/build.sh -a x86_64 -p -r
           mkdir -p out
           version="$(sed -n 's/^#define PACKAGE_VERSION "\(.*\)"/\1/p' win64/config.h)"
-          mv win64/vlc-redesign-*-win64.exe out/
-          mv win64/vlc-${version}-win64.zip "out/vlc-redesign-${version}-win64-portable.zip"
+          mv win64/vlc-redesign-*-win64.exe "out/VLC-Redesign-${version}-Windows-x64-Setup.exe"
+          mv win64/vlc-${version}-win64.zip "out/VLC-Redesign-${version}-Windows-x64-Portable.zip"
           ls -la out
 
       - uses: actions/upload-artifact@v4
@@ -102,7 +122,7 @@ jobs:
           if-no-files-found: error
 
   macos:
-    name: macOS ${{ matrix.arch }} (.app / .dmg)
+    name: macOS ${{ matrix.arch }} (.app)
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'macos')
     strategy:
       fail-fast: false

@@ -28,10 +28,12 @@ Grab the latest installers from **[Releases](../../releases)**:
 
 | Platform | Package |
 | --- | --- |
-| Windows x64 | `.exe` installer (NSIS, dark redesign theme) and a portable `.zip` |
-| macOS Apple Silicon (arm64) | `VLC Redesign.app` in a custom `.dmg` (plus `.app.zip`) |
-| macOS Intel (x86_64) | `VLC Redesign.app` in a custom `.dmg` (plus `.app.zip`) |
-| Linux x86_64 | `.AppImage` with AppImageLauncher integration disabled (`X-AppImage-Integrate=false`) |
+| Windows x64 | `Setup.exe` (NSIS with the dark redesign theme) and a portable `.zip` |
+| macOS Apple Silicon (arm64) | `VLC Redesign.app`, which installs itself into Applications when first opened |
+| macOS Intel (x86_64) | `VLC Redesign.app`, which installs itself into Applications when first opened |
+| Linux x86_64 | `.AppImage` with a setup wizard; works even where AppImageLauncher crashes |
+
+Builds are published for both **VLC 4.0** (development, `master`) and **VLC 3.0** (stable, `redesign-3.0` branch).
 
 All of them are built by GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)).
 The builds are unsigned, so see the first-launch notes in each release.
@@ -59,8 +61,13 @@ Installers ([`redesign/branding`](redesign/branding)):
 - **Windows:** dark welcome/finish pages with custom side art, a branded header and a custom welcome text
   and finish link. It installs side by side with official VLC (separate install dir, registry keys and
   Start-menu folder, and the uninstaller never touches VideoLAN's keys).
-- **macOS:** a custom DMG window with a dark background, drag-to-Applications arrow and a custom volume icon.
-- **Linux:** an AppImage with the redesign icon, desktop entry and AppStream metadata.
+- **macOS:** like [Jace Launcher](https://github.com/okjace/jace-launcher), the download is just the `.app`. Opened
+  from Downloads, it offers to copy itself into Applications, clear the quarantine flag ("damaged" warning),
+  add Dock and Desktop shortcuts, and then relaunches the installed copy.
+- **Linux:** like Jace Launcher, the AppImage opens a setup wizard (in the redesign style) that installs it to
+  `~/Applications` with an applications-menu entry, desktop shortcut, `vlc-redesign` command and AppStream
+  metadata. Launchers start it with `APPIMAGELAUNCHER_DISABLE=1`, and the AppImage magic bytes are cleared, so
+  AppImageLauncher, which aborts on Wayland desktops such as niri, never intercepts it.
 
 | DMG window | Windows installer |
 | --- | --- |

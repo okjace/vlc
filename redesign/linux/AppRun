@@ -19,4 +19,31 @@ for hook in "$HERE"/apprun-hooks/*.sh; do
     [ -f "$hook" ] && . "$hook"
 done
 
+SETUP="$HERE/usr/bin/vlc-redesign-setup"
+RECORD="${XDG_DATA_HOME:-$HOME/.local/share}/vlc-redesign/install.ini"
+
+case "$1" in
+    --install|--uninstall|--setup)
+        [ "$1" = "--setup" ] && shift
+        exec "$SETUP" "$@" ;;
+esac
+
+# Like Jace Launcher: the first time the downloaded AppImage runs, offer to
+# install it (applications menu, desktop shortcut, terminal command). Our own
+# launchers start the installed copy, so this only shows for a copy that isn't
+# the installed one. VLC_REDESIGN_NO_SETUP=1 skips it.
+if [ -n "$APPIMAGE" ] && [ -z "$VLC_REDESIGN_NO_SETUP" ] && [ -x "$SETUP" ]; then
+    installed="$(sed -n 's/^path=//p' "$RECORD" 2>/dev/null | head -n1)"
+    if [ "$(readlink -f "$installed" 2>/dev/null)" != "$(readlink -f "$APPIMAGE")" ]; then
+        target="$("$SETUP")"
+        case $? in
+            0)  # installed: start the installed copy (without AppImageLauncher)
+                [ -n "$target" ] && [ -x "$target" ] && \
+                    exec env APPIMAGELAUNCHER_DISABLE=1 VLC_REDESIGN_NO_SETUP=1 "$target" "$@" ;;
+            10) ;;          # "Run without installing"
+            *)  exit 0 ;;   # installed without launching, or cancelled
+        esac
+    fi
+fi
+
 exec "$HERE/usr/bin/vlc" "$@"

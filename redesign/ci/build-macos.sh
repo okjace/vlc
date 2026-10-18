@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build VLC Redesign for macOS and package it as "VLC Redesign.app" inside a
-# custom DMG (dark background with drag-to-Applications arrow), plus a zip.
+# Build VLC Redesign for macOS and package it as a self-installing
+# "VLC Redesign.app" (zipped for download).
 #
 # Usage: redesign/ci/build-macos.sh <x86_64|arm64>
 #
@@ -43,34 +43,18 @@ codesign --force --deep --sign - "$APP"
 codesign --verify --verbose "$APP" || true
 echo "::endgroup::"
 
-echo "::group::Create DMG"
-python3 -m pip install --quiet --break-system-packages dmgbuild 2>/dev/null \
-    || python3 -m pip install --quiet dmgbuild
-
-# Volume icon from the redesign icon
-ICONSET="$BUILD_DIR/vlc-redesign.iconset"
-rm -rf "$ICONSET" && mkdir -p "$ICONSET"
-SRC_ICON="$SRC_DIR/redesign/branding/vlc-redesign-512.png"
-for size in 16 32 128 256 512; do
-    sips -z $size $size "$SRC_ICON" --out "$ICONSET/icon_${size}x${size}.png" >/dev/null
-    double=$((size * 2))
-    [ $double -le 512 ] && sips -z $double $double "$SRC_ICON" --out "$ICONSET/icon_${size}x${size}@2x.png" >/dev/null
-done
-iconutil -c icns "$ICONSET" -o "$BUILD_DIR/vlc-redesign-volume.icns"
-
-DMG="$OUT_DIR/vlc-redesign-$VERSION-macos-$ARCH.dmg"
-rm -f "$DMG"
-cd "$SRC_DIR/extras/package/macosx/dmg"
-dmgbuild -s dmg_settings.py \
-    -D app="$APP" \
-    -D icon="$BUILD_DIR/vlc-redesign-volume.icns" \
-    "VLC Redesign" "$DMG"
+echo "::group::Check the self-installer is in the app"
+# The installer lives in the macosx interface plugin (VLCRedesignInstaller.m)
+grep -q VLCRedesignSkipInstallOffer "$APP/Contents/Frameworks/plugins/libmacosx_plugin.dylib" \
+    || { echo "::error::VLC Redesign self-installer missing from libmacosx_plugin"; exit 1; }
 echo "::endgroup::"
 
-echo "::group::Create zip"
+echo "::group::Package VLC Redesign.app"
+# Like Jace Launcher, the Mac download is just the .app (zipped so it survives
+# the download). Opened from Downloads, it installs itself into Applications.
 cd "$BUILD_DIR"
 ditto -c -k --sequesterRsrc --keepParent "VLC Redesign.app" \
-    "$OUT_DIR/vlc-redesign-$VERSION-macos-$ARCH.app.zip"
+    "$OUT_DIR/VLC-Redesign-$VERSION-macOS-$ARCH.app.zip"
 echo "::endgroup::"
 
 ls -la "$OUT_DIR"

@@ -54,6 +54,7 @@
 
 #import "main/CompatibilityFixes.h"
 #import "main/VLCMain+OldPrefs.h"
+#import "main/VLCRedesignInstaller.h"
 #import "main/VLCApplication.h"
 
 #import "menus/VLCMainMenu.h"
@@ -365,6 +366,12 @@ static VLCMain *sharedInstance = nil;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    /* VLC Redesign: opened from Downloads? offer to install into Applications */
+    if ([VLCRedesignInstaller offerInstallIfNeeded]) {
+        [NSApp terminate:nil];
+        return;
+    }
+
     _launched = YES;
 
     if (_libraryWindowController == nil) {

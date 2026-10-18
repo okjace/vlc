@@ -377,6 +377,8 @@ libmacosx_plugin_la_SOURCES = \
 	gui/macosx/main/VLCMain+OldPrefs.m \
 	gui/macosx/main/VLCMain.h \
 	gui/macosx/main/VLCMain.m \
+	gui/macosx/main/VLCRedesignInstaller.h \
+	gui/macosx/main/VLCRedesignInstaller.m \
 	gui/macosx/main/macosx.m \
 	gui/macosx/menus/VLCMainMenu.h \
 	gui/macosx/menus/VLCMainMenu.m \

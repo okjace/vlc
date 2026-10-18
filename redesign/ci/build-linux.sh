@@ -125,6 +125,14 @@ install -Dm644 "$SRC_DIR/redesign/branding/vlc-redesign.png" \
     "$APPDIR/usr/share/icons/hicolor/256x256/apps/vlc-redesign.png"
 install -Dm644 "$SRC_DIR/redesign/branding/vlc-redesign-512.png" \
     "$APPDIR/usr/share/icons/hicolor/512x512/apps/vlc-redesign.png"
+# setup wizard (installs the AppImage like Jace Launcher does) and its assets
+cmake -S "$SRC_DIR/redesign/setup" -B "$WORK_DIR/setup" -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_PREFIX_PATH="${SETUP_QT_PREFIX:-$QT_DIR}"
+cmake --build "$WORK_DIR/setup" -j"$JOBS"
+install -Dm755 "$WORK_DIR/setup/vlc-redesign-setup" "$APPDIR/usr/bin/vlc-redesign-setup"
+install -Dm644 "$SRC_DIR/redesign/branding/previews/nsis-welcome.png" \
+    "$APPDIR/usr/share/vlc-redesign/setup-side.png"
+echo "$VERSION" > "$APPDIR/usr/share/vlc-redesign/VERSION"
 # drop VLC's own desktop file so only ours is picked up by appimagetool
 rm -f "$APPDIR/usr/share/applications/vlc.desktop"
 endstep
@@ -164,7 +172,7 @@ export LD_LIBRARY_PATH="$APPDIR/usr/lib:$APPDIR/usr/lib/vlc:$LD_LIBRARY_PATH"
 export QMAKE="$QT_DIR/bin/qmake"
 export QML_SOURCES_PATHS="$SRC_DIR/modules/gui/qt"
 export EXTRA_QT_MODULES="waylandcompositor;svg"
-export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so"
+export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so;libqoffscreen.so"
 export LINUXDEPLOY_OUTPUT_VERSION="$VERSION"
 export APPIMAGE_EXTRACT_AND_RUN=1
 export NO_STRIP=1
@@ -172,6 +180,7 @@ export NO_STRIP=1
 ./linuxdeploy-x86_64.AppImage \
     --appdir "$APPDIR" \
     --executable "$APPDIR/usr/bin/vlc" \
+    --executable "$APPDIR/usr/bin/vlc-redesign-setup" \
     --desktop-file "$APPDIR/usr/share/applications/io.github.okjace.vlc_redesign.desktop" \
     --icon-file "$APPDIR/usr/share/icons/hicolor/256x256/apps/vlc-redesign.png" \
     --custom-apprun "$SRC_DIR/redesign/linux/AppRun" \
@@ -202,6 +211,13 @@ for lib in libGL.so.1 libEGL.so.1 libGLX.so.0 libGLdispatch.so.0 libdrm.so.2 lib
     rm -f "$APPDIR/usr/lib/$lib"
 done
 VERSION="$VERSION" ARCH=x86_64 ./appimagetool-x86_64.AppImage --no-appstream \
-    "$APPDIR" "$OUT_DIR/vlc-redesign-$VERSION-x86_64.AppImage"
+    "$APPDIR" "$OUT_DIR/VLC-Redesign-$VERSION-Linux-x86_64.AppImage"
+# Clear the AppImage magic bytes ("AI\x02" at offset 8). AppImageLauncher hooks
+# every file carrying them through binfmt_misc and aborts on Wayland desktops
+# without qt5-wayland (niri, Sway, Hyprland), so the AppImage "wouldn't open".
+# Without them the kernel runs the file as a normal executable; the AppImage
+# runtime itself doesn't need them.
+printf '\000\000\000' | dd of="$OUT_DIR/VLC-Redesign-$VERSION-Linux-x86_64.AppImage" \
+    bs=1 seek=8 count=3 conv=notrunc status=none
 ls -la "$OUT_DIR"
 endstep
