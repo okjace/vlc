@@ -137,6 +137,13 @@
                                  "\"https://www.videolan.org/contribute/\"><span style=\" text-decoration: "
                                  "underline; color:#0057ae;\">Help and join us!</span></a>"));
 
+    /* VLC Redesign fork credits */
+    joinus = [joinus stringByAppendingString:@"</p><p>This build is <b>VLC Redesign</b>, an unofficial fork "
+              "whose look is based on <a href=\"https://www.youtube.com/watch?v=ERFeOgqk324\">"
+              "&ldquo;I Redesigned VLC After 25 Years&rdquo;</a> by "
+              "<a href=\"https://www.youtube.com/@juxtopposed\">Juxtopposed</a>. "
+              "It is not affiliated with VideoLAN; all credit for VLC goes to the VideoLAN team."];
+
     NSString *joinUsWithStyle = [NSString stringWithFormat:@"<div style=\"text-align:left;font-family: -apple-system, Helvetica Neue;\">%@</div>", joinus];
     NSMutableAttributedString *joinus_readytorender = [[NSMutableAttributedString alloc] initWithHTML:[joinUsWithStyle dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]
                                                                                               options:@{NSCharacterEncodingDocumentOption : [NSNumber numberWithInt:NSUTF8StringEncoding]}

@@ -99,7 +99,9 @@ T.ItemDelegate {
 
     background: Widgets.AnimatedBackground {
         enabled: theme.initialized
-        color: theme.bg.primary
+        // redesign: the current page gets a faint accent-tinted tile
+        color: (control.checked && !control.hovered && !control.visualFocus)
+               ? Qt.alpha(theme.accent, 0.12) : theme.bg.primary
         border.color: visualFocus ? theme.visualFocus : "transparent"
 
         radius: control.radius

@@ -26,16 +26,15 @@
 
 + (NSColor *)VLCAccentColor
 {
-    if (@available(macOS 10.14, *)) {
-        return [NSColor controlAccentColor];
-    }
-
+    // VLC Redesign: the redesign uses VLC orange as its single accent colour,
+    // regardless of the system accent colour.
     return [NSColor VLCOrangeElementColor];
 }
 
 + (NSColor *)VLCOrangeElementColor
 {
-    return [NSColor colorWithRed:1. green:.38 blue:.04 alpha:1.];
+    // #FF8800
+    return [NSColor colorWithRed:1. green:136./255. blue:0. alpha:1.];
 }
 
 + (NSColor *)VLCSubtlerAccentColor
@@ -65,7 +64,8 @@
 
 + (NSColor *)VLClibrarySeparatorDarkColor
 {
-    return [NSColor colorWithRed:0.11 green:0.09 blue:0.07 alpha:1.];
+    // #1E1E1E
+    return [NSColor colorWithRed:30./255. green:30./255. blue:30./255. alpha:1.];
 }
 
 + (NSColor *)VLClibraryProgressIndicatorBackgroundColor
@@ -85,7 +85,8 @@
 
 + (NSColor *)VLCSliderDarkBackgroundColor
 {
-    return [NSColor colorWithCalibratedWhite:1 alpha:0.2];
+    // #262626
+    return [NSColor colorWithCalibratedWhite:38./255. alpha:1.0];
 }
 
 + (NSColor *)VLCLightSubtleBorderColor
@@ -95,7 +96,8 @@
 
 + (NSColor *)VLCDarkSubtleBorderColor
 {
-    return [NSColor colorWithCalibratedWhite:0.3 alpha:1.0];
+    // #2F2F2F
+    return [NSColor colorWithCalibratedWhite:47./255. alpha:1.0];
 }
 
 + (NSColor *)VLCSubtleBorderColor

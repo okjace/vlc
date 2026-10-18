@@ -1,0 +1,166 @@
+# Builds VLC Redesign installers for every platform.
+#
+#   Linux   x86_64  -> AppImage (AppImageLauncher integration disabled)
+#   Windows x86_64  -> NSIS .exe installer (+ portable .zip)
+#   macOS   x86_64  -> .app in a custom .dmg (+ .app.zip)
+#   macOS   arm64   -> .app in a custom .dmg (+ .app.zip)
+#
+# Pushing a tag named v* (or running the workflow manually with a tag)
+# publishes everything as a GitHub Release.
+#
+# UI design: Juxtopposed, "I Redesigned VLC After 25 Years"
+#            https://www.youtube.com/watch?v=ERFeOgqk324
+# VLC media player: VideoLAN and contributors, https://www.videolan.org
+
+name: Build VLC Redesign
+
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+    paths-ignore:
+      - '**.md'
+      - 'redesign/branding/previews/**'
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Publish the builds as a GitHub Release with this tag (leave empty to only build)'
+        required: false
+        default: ''
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux x86_64 (AppImage)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - name: Build and package
+        run: redesign/ci/build-linux.sh
+        env:
+          OUT_DIR: ${{ github.workspace }}/out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vlc-redesign-linux-x86_64
+          path: out/*.AppImage
+          if-no-files-found: error
+
+  windows:
+    name: Windows x86_64 (.exe installer)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    container:
+      # VideoLAN's own Windows cross-compilation image (mingw-w64, NSIS, ...)
+      image: registry.videolan.org/vlc-debian-win64-posix:20260611225331
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed to find the upstream contrib revision
+
+      - name: Locate prebuilt contribs
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          url="$(redesign/ci/prebuilt-contrib-url.sh win64 x86_64-w64-mingw32)"
+          echo "VLC_PREBUILT_CONTRIBS_URL=$url" >> "$GITHUB_ENV"
+          echo "Prebuilt contribs: ${url:-<none, building from source>}"
+
+      - name: Build and package
+        run: |
+          extras/package/win32/build.sh -a x86_64 -p -r
+          mkdir -p out
+          version="$(sed -n 's/^#define PACKAGE_VERSION "\(.*\)"/\1/p' win64/config.h)"
+          mv win64/vlc-redesign-*-win64.exe out/
+          mv win64/vlc-${version}-win64.zip "out/vlc-redesign-${version}-win64-portable.zip"
+          ls -la out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vlc-redesign-windows-x86_64
+          path: out/*
+          if-no-files-found: error
+
+  macos:
+    name: macOS ${{ matrix.arch }} (.app / .dmg)
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-15
+            group: macos-arm64
+            triplet: aarch64-apple-darwin19
+          - arch: x86_64
+            runner: macos-15-intel
+            group: macos-x86_64
+            triplet: x86_64-apple-darwin19
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 300
+    env:
+      # VideoLAN's prebuilt macOS contribs target darwin19 (macOS 10.15 SDK triplet)
+      VLC_FORCE_KERNELVERSION: 19
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Locate prebuilt contribs
+        run: |
+          url="$(redesign/ci/prebuilt-contrib-url.sh ${{ matrix.group }} ${{ matrix.triplet }})"
+          echo "VLC_PREBUILT_CONTRIBS_URL=$url" >> "$GITHUB_ENV"
+          echo "Prebuilt contribs: ${url:-<none, building from source>}"
+
+      - name: Build and package
+        run: redesign/ci/build-macos.sh ${{ matrix.arch }}
+        env:
+          OUT_DIR: ${{ github.workspace }}/out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vlc-redesign-macos-${{ matrix.arch }}
+          path: out/*
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: [linux, windows, macos]
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Checksums
+        run: |
+          cd dist
+          sha256sum * | tee SHA256SUMS.txt
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.release_tag }}
+          name: VLC Redesign ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || inputs.release_tag }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          body_path: redesign/RELEASE_NOTES.md
+          files: dist/*

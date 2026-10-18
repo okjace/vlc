@@ -1,0 +1,19 @@
+#!/bin/sh
+# AppRun for the VLC Redesign AppImage.
+# VLC locates plugins, Lua scripts and translations through these variables,
+# so everything resolves inside the mounted AppImage instead of /usr.
+HERE="$(dirname "$(readlink -f "$0")")"
+
+export VLC_PLUGIN_PATH="$HERE/usr/lib/vlc/plugins"
+export VLC_LIB_PATH="$HERE/usr/lib/vlc"
+export VLC_DATA_PATH="$HERE/usr/share/vlc"
+export VLC_LOCALEDIR="$HERE/usr/share/locale"
+export LD_LIBRARY_PATH="$HERE/usr/lib:$HERE/usr/lib/vlc${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export XDG_DATA_DIRS="$HERE/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+
+# Qt environment prepared by linuxdeploy-plugin-qt
+for hook in "$HERE"/apprun-hooks/*.sh; do
+    [ -f "$hook" ] && . "$hook"
+done
+
+exec "$HERE/usr/bin/vlc" "$@"

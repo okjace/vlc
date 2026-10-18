@@ -217,8 +217,8 @@ T.Control {
                 return VLCIcons.play_filled
         }
 
-        color: cursorInside ? theme.accent
-                            : "black"  //foreground is always black
+        // redesign: black glyph on a solid accent tile
+        color: "black"
 
         font.pixelSize: Math.round(parent.height / 1.7)
 
@@ -247,7 +247,7 @@ T.Control {
             anchors.fill: parent
             anchors.margins: -border.width * 4
 
-            radius: width / 2
+            radius: VLCStyle.dp(10, VLCStyle.scale)
             border.pixelAligned: false
 
             enabled: theme.initialized
@@ -258,12 +258,10 @@ T.Control {
         Rectangle {
             anchors.fill: parent
 
-            radius: width / 2
+            // redesign: rounded-square accent tile instead of a gradient disc
+            radius: VLCStyle.dp(8, VLCStyle.scale)
 
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "#e25b01" }
-                GradientStop { position: 1.0; color: "#f89a06" }
-            }
+            color: Qt.darker(theme.accent, 1.15)
 
             Widgets.RoundedRectangleShadow {
                 id: hoverShadow
@@ -280,13 +278,13 @@ T.Control {
             Rectangle {
                 id: innerRectangle
 
-                color: "white"
+                color: root.cursorInside ? Qt.lighter(theme.accent, 1.12) : theme.accent
 
                 anchors.fill: parent
                 anchors.margins: _diminished ? (parent.width / 2)
-                                             : VLCStyle.dp(2, VLCStyle.scale)
+                                             : 0
 
-                radius: width / 2
+                radius: VLCStyle.dp(8, VLCStyle.scale)
 
                 property bool _diminished: false
 

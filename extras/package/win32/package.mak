@@ -144,6 +144,8 @@ if HAVE_MAKENSIS
 	cp -r $(srcdir)/extras/package/win32/NSIS/helpers             "$(win32_destdir)/"
 	cp "$(top_srcdir)/extras/package/win32/NSIS/nsProcess.nsh" "$(win32_destdir)/NSIS/"
 	cp "$(top_srcdir)/extras/package/win32/NSIS/vlc_branding.bmp" "$(win32_destdir)/NSIS/"
+	cp "$(top_srcdir)/extras/package/win32/NSIS/vlc_header.bmp" "$(win32_destdir)/NSIS/"
+	cp "$(top_srcdir)/redesign/branding/vlc-redesign.ico" "$(win32_destdir)/NSIS/"
 endif
 
 if HAVE_MAKENSIS
@@ -197,6 +199,7 @@ EXTRA_DIST += \
 	extras/package/win32/NSIS/vlc.win32.nsi.in \
 	extras/package/win32/NSIS/spad.nsi.in \
 	extras/package/win32/NSIS/vlc_branding.bmp \
+	extras/package/win32/NSIS/vlc_header.bmp \
 	extras/package/win32/NSIS/languages/BengaliExtra.nsh \
 	extras/package/win32/NSIS/languages/BasqueExtra.nsh \
 	extras/package/win32/NSIS/languages/PortugueseBRExtra.nsh \

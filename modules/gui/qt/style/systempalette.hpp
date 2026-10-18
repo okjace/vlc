@@ -135,6 +135,16 @@ public:
 
     COLOR_DEFINITION(red500, "#FF0000");
 
+    // "VLC Redesign" palette, after Juxtopposed's redesign
+    // (https://www.youtube.com/watch?v=ERFeOgqk324)
+    COLOR_DEFINITION(rdSurface0, "#0A0A0A"); // window chrome, sidebar, control bar
+    COLOR_DEFINITION(rdSurface1, "#111111"); // main view background
+    COLOR_DEFINITION(rdSurface2, "#171717"); // panels, popups, tooltips
+    COLOR_DEFINITION(rdSurface3, "#1E1E1E"); // hovered rows / buttons
+    COLOR_DEFINITION(rdSurface4, "#262626"); // selected rows, inputs
+    COLOR_DEFINITION(rdSurface5, "#2F2F2F"); // borders, separators
+    COLOR_DEFINITION(rdText, "#F2F2F2");
+
 public:
     SystemPalette(QObject* parent = nullptr);
 

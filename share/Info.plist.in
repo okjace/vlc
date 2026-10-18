@@ -13,13 +13,13 @@
 	<key>CFBundleIconFile</key>
 	<string>VLC.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.videolan.vlc</string>
+	<string>io.github.okjace.vlc-redesign</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>VLC</string>
+	<string>VLC Redesign</string>
 	<key>CFBundleDisplayName</key>
-	<string>VLC</string>
+	<string>VLC Redesign</string>
 	<key>CFBundleShortVersionString</key>
 	<string>@VERSION@</string>
 	<key>CFBundlePackageType</key>

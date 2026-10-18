@@ -344,6 +344,12 @@ static VLCMain *sharedInstance = nil;
     }
 #endif
 
+    // VLC Redesign: the redesign is dark-first, so always use the dark appearance.
+    if (@available(macOS 10.14, *)) {
+        NSApplication.sharedApplication.appearance =
+            [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+    }
+
     _clickerManager = [[VLCClickerManager alloc] init];
 
 #ifdef HAVE_SPARKLE
