@@ -69,7 +69,7 @@
     <path
        id="path11125"
        d="m 102.80953,121.61904 a 5.2916667,5.2916667 0 0 0 -5.291678,5.29167 5.2916667,5.2916667 0 0 0 5.291678,5.29167 5.2916667,5.2916667 0 0 0 5.29166,-5.29167 5.2916667,5.2916667 0 0 0 -5.29166,-5.29167 z m 0,0.79375 a 4.4979167,4.4979167 0 0 1 4.49791,4.49792 4.4979167,4.4979167 0 0 1 -4.49791,4.49792 4.4979167,4.4979167 0 0 1 -4.497928,-4.49792 4.4979167,4.4979167 0 0 1 4.497928,-4.49792 z"
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
        inkscape:connector-curvature="0" />
     <ellipse
        ry="1.1906253"
@@ -77,6 +77,6 @@
        cy="126.91071"
        cx="102.80951"
        id="ellipse11127"
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate" />
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate" />
   </g>
 </svg>

@@ -101,6 +101,13 @@ AboutDialog::AboutDialog( intf_thread_t *_p_intf)
     QString translatedString = qtr( "<p>VLC media player is a free and open source media player, encoder, and streamer made by the volunteers of the <a href=\"http://www.videolan.org/\"><span style=\" text-decoration: underline; color:#0057ae;\">VideoLAN</span></a> community.</p><p>VLC uses its internal codecs, works on essentially every popular platform, and can read almost all files, CDs, DVDs, network streams, capture cards and other media formats!</p><p><a href=\"http://www.videolan.org/contribute/\"><span style=\" text-decoration: underline; color:#0057ae;\">Help and join us!</span></a>" );
     if ( var_InheritBool( p_intf, "qt-dark-palette" ) )
         translatedString.remove(QLatin1String("#0057ae"));
+    /* VLC Redesign fork credits */
+    translatedString += "</p><p>This build is <b>VLC Redesign</b>, an unofficial community fork whose interface "
+        "is based on the design from <a href=\"https://www.youtube.com/watch?v=ERFeOgqk324\">"
+        "<span style=\" text-decoration: underline; color:#FF8800;\">&ldquo;I Redesigned VLC After 25 Years&rdquo;</span></a> by "
+        "<a href=\"https://www.youtube.com/@juxtopposed\"><span style=\" text-decoration: underline; color:#FF8800;\">Juxtopposed</span></a>. "
+        "It is not affiliated with or endorsed by VideoLAN. All credit for VLC itself goes to "
+        "the VideoLAN team and contributors.";
     ui.MainBlabla->setText("<html><head/><body>" + translatedString + "</p></body> </html>");
 
 #if 0

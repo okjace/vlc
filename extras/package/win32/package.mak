@@ -121,6 +121,8 @@ package-win32-src: package-win-strip
 	cp -r $(srcdir)/extras/package/win32/NSIS/helpers             "$(win32_destdir)/"
 	cp "$(top_srcdir)/extras/package/win32/NSIS/nsProcess.nsh" "$(win32_destdir)/NSIS/"
 	cp "$(top_srcdir)/extras/package/win32/NSIS/vlc_branding.bmp" "$(win32_destdir)/NSIS/"
+	cp "$(top_srcdir)/extras/package/win32/NSIS/vlc_header.bmp" "$(win32_destdir)/NSIS/"
+	cp "$(top_srcdir)/redesign/branding/vlc-redesign.ico" "$(win32_destdir)/NSIS/"
 
 package-win32-exe: package-win32-src $(win32_destdir)/NSIS/nsProcess.dll extras/package/win32/NSIS/vlc.win32.nsi
 # Create package
@@ -187,6 +189,7 @@ EXTRA_DIST += \
 	extras/package/win32/NSIS/vlc.win32.nsi.in \
 	extras/package/win32/NSIS/spad.nsi.in \
 	extras/package/win32/NSIS/vlc_branding.bmp \
+	extras/package/win32/NSIS/vlc_header.bmp \
 	extras/package/win32/NSIS/languages/AfrikaansExtra.nsh \
 	extras/package/win32/NSIS/languages/AlbanianExtra.nsh \
 	extras/package/win32/NSIS/languages/ArabicExtra.nsh \

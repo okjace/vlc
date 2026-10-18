@@ -70,7 +70,7 @@
      transform="translate(-384,-1004.3622)"
      style="display:inline">
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
        d="m 388,1016.3621 12,12 -12,12 h 7.07031 l 8.46484,-8.4648 3.53516,-3.5352 -3.53516,-3.5352 -8.46484,-8.4648 z m 11,0 12,12 -12,12 h 7.07031 l 8.46484,-8.4648 3.53516,-3.5352 -3.53516,-3.5352 -8.46484,-8.4648 z m 11,0 12,12 -12,12 h 7.07031 l 8.46484,-8.4648 3.53516,-3.5352 -3.53516,-3.5352 -8.46484,-8.4648 z"
        id="rect10655"
        inkscape:connector-curvature="0" />

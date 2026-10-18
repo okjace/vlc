@@ -132,7 +132,7 @@
        x="103.33869"
        y="127.43988" />
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
        d="m 107.30744,121.61905 -1.05833,1.05833 h -8.731253 v 7.40833 h 2.38125 v -1.05833 h -1.322916 v -5.29167 h 7.672919 v 5.29167 h -3.175 v 1.05833 h 3.175 v 1.05834 h 1.05833 v -0.79375 -0.79375 h 0.79375 v -1.85209 h -0.79375 v -1.05833 h 0.79375 v -1.5875 h -0.79375 v -2.11667 l 0.52917,-0.52916 h 0.26458 v -0.79375 z m -3.43958,8.46666 h -4.762503 v 1.05834 h 4.762503 z"
        id="path6534"
        inkscape:connector-curvature="0"
@@ -142,6 +142,6 @@
        inkscape:connector-curvature="0"
        id="path7094"
        d="m 107.30744,121.61905 -1.05833,1.05833 h -8.731253 v 7.40833 h 2.38125 v -1.05833 h -1.322916 v -5.29167 h 7.672919 v 5.29167 h -3.175 v 1.05833 h 3.175 v 1.05834 h 1.05833 v -0.79375 -0.79375 h 0.79375 v -1.85209 h -0.79375 v -1.05833 h 0.79375 v -1.5875 h -0.79375 v -2.11667 l 0.52917,-0.52916 h 0.26458 v -0.79375 z m -3.43958,8.46666 h -4.762503 v 1.05834 h 4.762503 z"
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate" />
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.58749998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate" />
   </g>
 </svg>

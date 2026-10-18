@@ -154,7 +154,7 @@ vlc_module_begin()
     cannot_unload_broken_library()
 
     set_section(N_("Appearance"), 0)
-        add_bool("macosx-interfacestyle", false, INTERFACE_STYLE_TEXT, INTERFACE_STYLE_LONGTEXT, false)
+        add_bool("macosx-interfacestyle", true /* VLC Redesign: dark-first */, INTERFACE_STYLE_TEXT, INTERFACE_STYLE_LONGTEXT, false)
         add_bool("macosx-nativefullscreenmode", false, NATIVE_FULLSCREEN_MODE_ON_LION_TEXT, NATIVE_FULLSCREEN_MODE_ON_LION_LONGTEXT, false)
         add_bool("macosx-statusicon", true, DISPLAY_STATUS_ICONMENU_TEXT, DISPLAY_STATUS_ICONMENU_LONGTEXT, false)
         add_bool("macosx-icon-change", true, ICONCHANGE_TEXT, ICONCHANGE_LONGTEXT, true)

@@ -260,7 +260,8 @@ vlc_module_begin ()
                 RECENTPLAY_FILTER_TEXT, RECENTPLAY_FILTER_LONGTEXT, false )
     add_integer( "qt-continue", 1, CONTINUE_PLAYBACK_TEXT, CONTINUE_PLAYBACK_TEXT, false )
             change_integer_list(i_continue_list, psz_continue_list_text )
-    add_bool( "qt-dark-palette", false, QT_DARK_TEXT,
+    /* VLC Redesign: the redesign is dark-first */
+    add_bool( "qt-dark-palette", true, QT_DARK_TEXT,
                   QT_DARK_LONGTEXT, false )
 
 #ifdef UPDATE_CHECK
@@ -287,7 +288,8 @@ vlc_module_begin ()
     add_bool( "qt-error-dialogs", true, ERROR_TEXT,
               ERROR_TEXT, false )
 
-    add_string( "qt-slider-colours", "153;210;153;20;210;20;255;199;15;245;39;29",
+    /* VLC Redesign: orange volume gradient */
+    add_string( "qt-slider-colours", "255;170;80;255;136;0;255;120;0;255;80;30",
                 SLIDERCOL_TEXT, SLIDERCOL_LONGTEXT, false )
 
     add_bool( "qt-privacy-ask", true, PRIVACY_TEXT, PRIVACY_TEXT,
@@ -394,57 +396,113 @@ bool isDarkPaletteEnabled(intf_thread_t *p_intf) {
     return darkPalette;
 }
 
+/* VLC Redesign palette, after Juxtopposed's "I Redesigned VLC After 25 Years"
+ * (https://www.youtube.com/watch?v=ERFeOgqk324): layered near-black surfaces
+ * and VLC orange as the only accent colour. */
 void applyDarkPalette() {
     QPalette darkPalette;
-    static const QColor darkColor  (33, 33, 33);
-    static const QColor gray       (75,75,75);
-    static const QColor lightGray  (138, 138, 138);
-    static const QColor baseColor  (18, 18, 18);
-    static const QColor linkColor  (255, 168, 81);
+    static const QColor window     (0x11, 0x11, 0x11);
+    static const QColor base       (0x0A, 0x0A, 0x0A);
+    static const QColor panel      (0x1E, 0x1E, 0x1E);
+    static const QColor text       (0xF2, 0xF2, 0xF2);
+    static const QColor muted      (0x8A, 0x8A, 0x8A);
+    static const QColor disabled   (0x4A, 0x4A, 0x4A);
+    static const QColor accent     (0xFF, 0x88, 0x00);
 
-#ifdef Q_OS_WIN
-    QColor accentColor = getWindowsAccentColor();
-#else
-    QColor accentColor (42, 130, 218);
-#endif
+    const QPalette::ColorGroup groups[] = { QPalette::Active, QPalette::Inactive };
+    for (QPalette::ColorGroup g : groups)
+    {
+        darkPalette.setColor(g, QPalette::Window,          window);
+        darkPalette.setColor(g, QPalette::WindowText,      text);
+        darkPalette.setColor(g, QPalette::Base,            base);
+        darkPalette.setColor(g, QPalette::AlternateBase,   panel);
+        darkPalette.setColor(g, QPalette::Button,          panel);
+        darkPalette.setColor(g, QPalette::ButtonText,      text);
+        darkPalette.setColor(g, QPalette::Text,            text);
+        darkPalette.setColor(g, QPalette::BrightText,      accent);
+        darkPalette.setColor(g, QPalette::ToolTipBase,     panel);
+        darkPalette.setColor(g, QPalette::ToolTipText,     text);
+        darkPalette.setColor(g, QPalette::Highlight,       accent);
+        darkPalette.setColor(g, QPalette::HighlightedText, Qt::black);
+        darkPalette.setColor(g, QPalette::Link,            accent);
+        darkPalette.setColor(g, QPalette::LinkVisited,     accent.darker(115));
+        darkPalette.setColor(g, QPalette::Light,           QColor(0x2F, 0x2F, 0x2F));
+        darkPalette.setColor(g, QPalette::Midlight,        QColor(0x26, 0x26, 0x26));
+        darkPalette.setColor(g, QPalette::Mid,             QColor(0x1E, 0x1E, 0x1E));
+        darkPalette.setColor(g, QPalette::Dark,            QColor(0x0A, 0x0A, 0x0A));
+        darkPalette.setColor(g, QPalette::Shadow,          Qt::black);
+    }
+    darkPalette.setColor(QPalette::Inactive, QPalette::WindowText, muted.lighter(140));
 
-    // Active group (the currently focused window)
-    darkPalette.setColor(QPalette::Active, QPalette::Window,          darkColor);
-    darkPalette.setColor(QPalette::Active, QPalette::WindowText,      Qt::white);
-    darkPalette.setColor(QPalette::Active, QPalette::Base,            baseColor);
-    darkPalette.setColor(QPalette::Active, QPalette::AlternateBase,   darkColor);
-    darkPalette.setColor(QPalette::Active, QPalette::Button,          darkColor);
-    darkPalette.setColor(QPalette::Active, QPalette::ButtonText,      Qt::white);
-    darkPalette.setColor(QPalette::Active, QPalette::Text,            Qt::white);
-    darkPalette.setColor(QPalette::Active, QPalette::Highlight,       accentColor);
-    darkPalette.setColor(QPalette::Active, QPalette::HighlightedText, Qt::white);
-    darkPalette.setColor(QPalette::Active, QPalette::Link,            linkColor);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Window,          window);
+    darkPalette.setColor(QPalette::Disabled, QPalette::WindowText,      disabled);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Base,            base);
+    darkPalette.setColor(QPalette::Disabled, QPalette::AlternateBase,   panel);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Button,          base);
+    darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText,      disabled);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Text,            disabled);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Highlight,       disabled);
+    darkPalette.setColor(QPalette::Disabled, QPalette::HighlightedText, muted);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Light,           window);
 
-    // Inactive group (unfocused window)
-    darkPalette.setColor(QPalette::Inactive, QPalette::Window,          darkColor);
-    darkPalette.setColor(QPalette::Inactive, QPalette::WindowText,      lightGray);
-    darkPalette.setColor(QPalette::Inactive, QPalette::Base,            baseColor);
-    darkPalette.setColor(QPalette::Inactive, QPalette::AlternateBase,   darkColor);
-    darkPalette.setColor(QPalette::Inactive, QPalette::Button,          darkColor);
-    darkPalette.setColor(QPalette::Inactive, QPalette::ButtonText,      lightGray);
-    darkPalette.setColor(QPalette::Inactive, QPalette::Text,            lightGray);
-    darkPalette.setColor(QPalette::Inactive, QPalette::Highlight,       accentColor);
-    darkPalette.setColor(QPalette::Inactive, QPalette::HighlightedText, lightGray);
-
-    // Disabled group (grayed-out widgets)
-    darkPalette.setColor(QPalette::Disabled, QPalette::Window,          darkColor);
-    darkPalette.setColor(QPalette::Disabled, QPalette::WindowText,      lightGray);
-    darkPalette.setColor(QPalette::Disabled, QPalette::Base,            baseColor);
-    darkPalette.setColor(QPalette::Disabled, QPalette::AlternateBase,   darkColor);
-    darkPalette.setColor(QPalette::Disabled, QPalette::Button,          baseColor);
-    darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText,      gray);
-    darkPalette.setColor(QPalette::Disabled, QPalette::Text,            gray);
-    darkPalette.setColor(QPalette::Disabled, QPalette::Highlight,       gray);
-    darkPalette.setColor(QPalette::Disabled, QPalette::HighlightedText, gray);
-    darkPalette.setColor(QPalette::Disabled, QPalette::Light,           darkColor);
-
-    // Apply the dark palette globally
     QApplication::setPalette(darkPalette);
+
+    /* Rounded, flat controls with the orange accent */
+    qApp->setStyleSheet(
+        "QToolTip { color: #F2F2F2; background: #1E1E1E; border: 1px solid #2F2F2F;"
+        "  border-radius: 6px; padding: 4px 6px; }"
+        "QMenu { background: #171717; border: 1px solid #2F2F2F; border-radius: 10px; padding: 6px; }"
+        "QMenu::item { padding: 6px 28px 6px 26px; border-radius: 6px; }"
+        "QMenu::item:selected { background: #262626; color: #FFFFFF; }"
+        "QMenu::item:disabled { color: #4A4A4A; }"
+        "QMenu::separator { height: 1px; background: #262626; margin: 5px 8px; }"
+        "QMenuBar { background: #0A0A0A; }"
+        "QMenuBar::item { padding: 4px 10px; border-radius: 6px; background: transparent; }"
+        "QMenuBar::item:selected { background: #1E1E1E; }"
+        "QPushButton { background: #1E1E1E; border: 1px solid #2F2F2F; border-radius: 8px;"
+        "  padding: 5px 16px; }"
+        "QPushButton:hover { background: #262626; }"
+        "QPushButton:pressed { background: #2F2F2F; }"
+        "QPushButton:default { background: #FF8800; color: black; border: none; }"
+        "QPushButton:default:hover { background: #FF9A26; }"
+        "QPushButton:disabled { color: #4A4A4A; background: #171717; }"
+        "QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox { background: #0A0A0A; border: 1px solid #2F2F2F;"
+        "  border-radius: 6px; padding: 3px 6px; selection-background-color: #FF8800; selection-color: black; }"
+        "QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus { border-color: #FF8800; }"
+        "QComboBox QAbstractItemView { background: #171717; border: 1px solid #2F2F2F;"
+        "  selection-background-color: #262626; selection-color: #FFFFFF; }"
+        "QTabBar::tab { background: transparent; color: #8A8A8A; padding: 6px 14px;"
+        "  border: none; border-bottom: 2px solid transparent; }"
+        "QTabBar::tab:selected { color: #F2F2F2; border-bottom: 2px solid #FF8800; }"
+        "QTabBar::tab:hover { color: #F2F2F2; }"
+        "QTabWidget::pane { border: 1px solid #262626; border-radius: 8px; top: -1px; }"
+        "QGroupBox { border: 1px solid #262626; border-radius: 10px; margin-top: 14px; padding-top: 6px; }"
+        "QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 4px; color: #8A8A8A; }"
+        "QHeaderView::section { background: #111111; color: #8A8A8A; border: none;"
+        "  border-bottom: 1px solid #262626; padding: 4px 6px; }"
+        "QTreeView, QListView, QTableView { background: #0A0A0A; border: none; outline: 0;"
+        "  alternate-background-color: #111111; }"
+        "QTreeView::item:selected, QListView::item:selected, QTableView::item:selected {"
+        "  background: #262626; color: #FF8800; }"
+        "QTreeView::item:hover, QListView::item:hover { background: #1A1A1A; }"
+        "QScrollBar:vertical { background: transparent; width: 10px; margin: 0; }"
+        "QScrollBar:horizontal { background: transparent; height: 10px; margin: 0; }"
+        "QScrollBar::handle { background: #2F2F2F; border-radius: 4px; min-height: 24px; min-width: 24px; }"
+        "QScrollBar::handle:hover { background: #3A3A3A; }"
+        "QScrollBar::add-line, QScrollBar::sub-line { width: 0; height: 0; }"
+        "QScrollBar::add-page, QScrollBar::sub-page { background: none; }"
+        "QSlider::groove:horizontal { height: 4px; background: #262626; border-radius: 2px; }"
+        "QSlider::sub-page:horizontal { background: #FF8800; border-radius: 2px; }"
+        "QSlider::handle:horizontal { background: #F2F2F2; width: 12px; margin: -5px 0; border-radius: 6px; }"
+        "QCheckBox::indicator, QRadioButton::indicator { width: 15px; height: 15px; }"
+        "QCheckBox::indicator { border: 1px solid #3A3A3A; border-radius: 4px; background: #0A0A0A; }"
+        "QCheckBox::indicator:checked { background: #FF8800; border-color: #FF8800; }"
+        "QStatusBar { background: #0A0A0A; color: #8A8A8A; }"
+        "QStatusBar::item { border: none; }"
+        "QSplitter::handle { background: #111111; }"
+        "QToolButton { border-radius: 6px; }"
+        "QToolButton:hover { background: #1E1E1E; }"
+        "QToolButton:checked { background: #262626; }");
 }
 
 /* Open Interface */
@@ -678,6 +736,9 @@ static void *ThreadPlatform( void *obj, char *platform_name )
 
     /* Loads and tries to apply the preferred QStyle */
     QString s_style = getSettings()->value( "MainWindow/QtStyle", "" ).toString();
+    /* VLC Redesign: Fusion follows the palette and stylesheet on every platform */
+    if (s_style.isEmpty() && isDarkPaletteEnabled(p_intf))
+        s_style = "Fusion";
     if (!s_style.isEmpty())
         QApplication::setStyle( s_style );
 

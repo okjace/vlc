@@ -92,7 +92,7 @@
        y="-1046.3622"
        transform="scale(1,-1)" />
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:6;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
        d="m 388.00001,1008.3622 v 14 h 5.5 v 3 h -5.5 v 6 h 18.5 v 3 h -5.5 v 14 h 14 v -14 h -5.5 v -3 h 18.5 v -6 h -5.5 v -3 h 5.5 v -14 h -14 v 14 h 5.5 v 3 h -23 v -3 h 5.5 v -14 z m 2,2 h 10 v 10 h -10 z m 26,0 h 10 v 10 h -10 z m -13,26 h 10 v 10 h -10 z"
        id="rect10832-1"
        inkscape:connector-curvature="0" />

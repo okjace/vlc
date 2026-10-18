@@ -31,6 +31,7 @@ libmacosx_plugin_la_SOURCES = \
 	gui/macosx/VLCHelpWindowController.h gui/macosx/VLCHelpWindowController.m \
 	gui/macosx/VLCMain+OldPrefs.h gui/macosx/VLCMain+OldPrefs.m \
 	gui/macosx/VLCMain.h gui/macosx/VLCMain.m \
+	gui/macosx/VLCRedesignInstaller.h gui/macosx/VLCRedesignInstaller.m \
 	gui/macosx/VLCApplication.h gui/macosx/VLCApplication.m \
 	gui/macosx/iTunes.h \
 	gui/macosx/VLCKeyboardBacklightControl.h gui/macosx/VLCKeyboardBacklightControl.m \

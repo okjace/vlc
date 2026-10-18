@@ -68,7 +68,7 @@
        transform="matrix(0.26458333,0,0,0.26458333,96.459526,120.56071)"
        id="rect11084" />
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
        d="M 8 8 C 5.7840252 8 4 9.7839874 4 12 L 4 36 C 4 38.216013 5.7840252 40 8 40 L 16 40 L 16 42 L 32 42 L 32 40 L 40 40 C 42.216013 40 44 38.216013 44 36 L 44 12 C 44 9.7839874 42.216013 8 40 8 L 8 8 z M 8 12 L 40 12 L 40 36 L 8 36 L 8 12 z "
        transform="matrix(0.26458333,0,0,0.26458333,96.459526,120.56071)"
        id="rect10711-8" />

@@ -73,7 +73,7 @@
      transform="translate(-384,-1004.3622)"
      style="display:inline">
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.19999981;stroke-opacity:1;marker:none;enable-background:accumulate"
        d="M 8 8 C 5.784 8 4 9.784 4 12 L 4 36 C 4 38.216 5.784 40 8 40 L 40 40 C 42.216 40 44 38.216 44 36 L 44 12 C 44 9.784 42.216 8 40 8 L 8 8 z M 8 12 L 40 12 L 40 36 L 8 36 L 8 12 z M 12 16 L 12 20 L 12 25 L 16 25 L 16 20 L 21 20 L 21 16 L 12 16 z M 32 23 L 32 28 L 27 28 L 27 32 L 32 32 L 36 32 L 36 28 L 36 23 L 32 23 z "
        transform="translate(384,1004.3622)"
        id="rect10711" />

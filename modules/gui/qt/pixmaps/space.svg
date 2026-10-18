@@ -70,7 +70,7 @@
      transform="translate(-384,-1004.3622)"
      style="display:inline">
     <path
-       style="display:inline;fill:#747474;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="display:inline;fill:#D0D0D0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 396,1020.3622 -8,8 8,8 v -5 h 3 v -6 h -3 z m 24,0 v 5 h -3 v 6 h 3 v 5 l 8,-8 z m -19,5 v 6 h 6 v -6 z m 8,0 v 6 h 6 v -6 z"
        id="path6879"
        inkscape:connector-curvature="0" />

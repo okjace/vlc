@@ -101,11 +101,9 @@ void SeekStyle::drawComplexControl( ComplexControl cc, const QStyleOptionComplex
 
                 if (dark)
                 {
-                    QColor top(0x25, 0x25, 0x25);
-                    QColor bot(0x65, 0x65, 0x65);
-
-                    backgroundGradient.setColorAt(0.00, top);
-                    backgroundGradient.setColorAt(1.00, bot);
+                    /* VLC Redesign: flat dark track */
+                    backgroundGradient.setColorAt(0.00, QColor(0x26, 0x26, 0x26));
+                    backgroundGradient.setColorAt(1.00, QColor(0x26, 0x26, 0x26));
                 } else {
                     backgroundGradient.setColorAt(0.0, backgroundBase.darker(140));
                     backgroundGradient.setColorAt(1.0, backgroundBase);
@@ -116,10 +114,8 @@ void SeekStyle::drawComplexControl( ComplexControl cc, const QStyleOptionComplex
                 QLinearGradient foregroundGradient( 0, 0, 0, groove.height() );
 
                 if (dark) {
-                    #ifdef Q_OS_WIN
-                        /* use accent color on windows dark mode */
-                        foregroundBase = slideroptions->palette.color(QPalette::Highlight);
-                    #endif
+                    /* VLC Redesign: VLC orange progress on every platform */
+                    foregroundBase = QColor(0xFF, 0x88, 0x00);
                     /* adjust gradient dynamically based on accent */
                     int v = foregroundBase.value();
                     int lighterFactor = 130 + (255 - v) / 3;

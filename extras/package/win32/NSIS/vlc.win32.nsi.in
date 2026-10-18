@@ -3,16 +3,20 @@
 ; (http://nsis.sourceforge.net) ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-!define PRODUCT_NAME "VLC media player"
+; VLC Redesign: an unofficial build of VLC with the interface from Juxtopposed's
+; "I Redesigned VLC After 25 Years" (https://www.youtube.com/watch?v=ERFeOgqk324).
+; It installs side by side with the official VLC, so every name, folder and
+; registry key below is distinct from VideoLAN's.
+!define PRODUCT_NAME "VLC Redesign"
 !define VERSION @VERSION@
 !define PRODUCT_VERSION @VERSION@
-!define PRODUCT_GROUP "VideoLAN"
-!define PRODUCT_PUBLISHER "VideoLAN"
-!define PRODUCT_WEB_SITE "https://www.videolan.org/"
-!define PRODUCT_DIR_REGKEY "Software\VideoLAN\VLC"
-!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+!define PRODUCT_GROUP "VLC Redesign"
+!define PRODUCT_PUBLISHER "VLC Redesign"
+!define PRODUCT_WEB_SITE "https://github.com/okjace/vlc"
+!define PRODUCT_DIR_REGKEY "Software\VLC Redesign 3"
+!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\VLC Redesign 3"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
-!define PRODUCT_ID "{ea92ef52-afe4-4212-bacb-dfe9fca94cd6}"
+!define PRODUCT_ID "{8b3e2d71-6f4a-4e0c-a5d9-3c7b1e9f2a46}"
 
 !define MUI_LANGDLL_REGISTRY_ROOT "HKLM"
 !define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_DIR_REGKEY}"
@@ -44,10 +48,10 @@ Var 32bitPath
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Name "${PRODUCT_NAME}"
-@HAVE_WIN64_FALSE@                   OutFile ..\vlc-${VERSION}-win32.exe
-@HAVE_WIN64_TRUE@@HAVE_ARM64_FALSE@  OutFile ..\vlc-${VERSION}-win64.exe
-@HAVE_WIN64_TRUE@@HAVE_ARM64_TRUE@   OutFile ..\vlc-${VERSION}-winarm64.exe
-InstallDir "$@PROGRAMFILES@\VideoLAN\VLC"
+@HAVE_WIN64_FALSE@                   OutFile ..\vlc-redesign-${VERSION}-win32.exe
+@HAVE_WIN64_TRUE@@HAVE_ARM64_FALSE@  OutFile ..\vlc-redesign-${VERSION}-win64.exe
+@HAVE_WIN64_TRUE@@HAVE_ARM64_TRUE@   OutFile ..\vlc-redesign-${VERSION}-winarm64.exe
+InstallDir "$@PROGRAMFILES@\VLC Redesign 3"
 !ifdef NSIS_LZMA_COMPRESS_WHOLE
 SetCompressor lzma
 !else
@@ -56,7 +60,7 @@ SetCompressor /SOLID lzma
 
 SetOverwrite ifdiff
 CRCCheck on
-BrandingText "${PRODUCT_GROUP} ${PRODUCT_NAME}"
+BrandingText "VLC Redesign  -  design by Juxtopposed, VLC by VideoLAN"
 
 InstType "$(Name_InstTypeRecommended)"
 InstType "$(Name_InstTypeMinimum)"
@@ -80,8 +84,18 @@ RequestExecutionLevel admin
 
 ; MUI Settings
   !define MUI_ABORTWARNING
-  !define MUI_ICON "vlc.ico"
-  !define MUI_UNICON "vlc.ico"
+  !define MUI_ICON "NSIS/vlc-redesign.ico"
+  !define MUI_UNICON "NSIS/vlc-redesign.ico"
+
+  ; VLC Redesign look: dark welcome/finish pages with the redesign artwork
+  !define MUI_BGCOLOR "111111"
+  !define MUI_TEXTCOLOR "F2F2F2"
+  !define MUI_HEADERIMAGE
+  !define MUI_HEADERIMAGE_RIGHT
+  !define MUI_HEADERIMAGE_BITMAP "NSIS/vlc_header.bmp"
+  !define MUI_HEADERIMAGE_UNBITMAP "NSIS/vlc_header.bmp"
+  !define MUI_INSTFILESPAGE_COLORS "F2F2F2 111111"
+  !define MUI_INSTFILESPAGE_PROGRESSBAR "smooth"
   !define MUI_COMPONENTSPAGE_SMALLDESC
 
   ; Banner (welcome and finish page) for installer
@@ -93,6 +107,8 @@ RequestExecutionLevel admin
   ; Welcome page
     !define MUI_PAGE_CUSTOMFUNCTION_PRE PageFastUpdatePre
     !define MUI_WELCOMEPAGE_TITLE_3LINES
+    !define MUI_WELCOMEPAGE_TITLE "Welcome to VLC Redesign ${VERSION}"
+    !define MUI_WELCOMEPAGE_TEXT "VLC Redesign is VLC media player with a new interface, based on the design from $\"I Redesigned VLC After 25 Years$\" by Juxtopposed (youtube.com/@juxtopposed).$\r$\n$\r$\nVLC media player is made by the VideoLAN team and contributors. This is an unofficial build and is not affiliated with VideoLAN.$\r$\n$\r$\nIt installs alongside any existing copy of VLC.$\r$\n$\r$\n$_CLICK"
     !insertmacro MUI_PAGE_WELCOME
   ; Optional update page
     Page custom PageReinstall PageLeaveReinstall
@@ -113,8 +129,10 @@ RequestExecutionLevel admin
     !define MUI_PAGE_CUSTOMFUNCTION_PRE PageFastUpdatePre
     !define MUI_FINISHPAGE_RUN
     !define MUI_FINISHPAGE_RUN_FUNCTION AppExecAs
-    !define MUI_FINISHPAGE_LINK "$(Link_VisitWebsite)"
-    !define MUI_FINISHPAGE_LINK_LOCATION "https://www.videolan.org/vlc/"
+    !define MUI_FINISHPAGE_TITLE "VLC Redesign is ready"
+    !define MUI_FINISHPAGE_LINK "Watch the redesign video by Juxtopposed"
+    !define MUI_FINISHPAGE_LINK_LOCATION "https://www.youtube.com/watch?v=ERFeOgqk324"
+    !define MUI_FINISHPAGE_LINK_COLOR "FF8800"
     !define MUI_FINISHPAGE_NOREBOOTSUPPORT
     !insertmacro MUI_PAGE_FINISH
 
@@ -354,37 +372,37 @@ skip_uninstall32_cleanup:
   ; Windows default programs Registration
   ; Vista and above detection
   ${If} ${AtLeastWinVista}
-    WriteRegStr HKLM "Software\RegisteredApplications" "VLC" "Software\Clients\Media\VLC\Capabilities"
-    WriteRegStr HKLM "Software\Clients\Media\VLC\Capabilities" "ApplicationName" "VLC media player"
-    WriteRegStr HKLM "Software\Clients\Media\VLC\Capabilities" "ApplicationDescription" "VLC - The video swiss knife"
-    WriteRegStr HKLM "Software\Clients\Media\VLC" "" "VLC media player"
-    WriteRegStr HKLM "Software\Clients\Media\VLC\InstallInfo" "HideIconsCommand" "$\"$INSTDIR\spad-setup.exe$\" /HideIcons /S"
-    WriteRegStr HKLM "Software\Clients\Media\VLC\InstallInfo" "ShowIconsCommand" "$\"$INSTDIR\spad-setup.exe$\" /ShowIcons /S"
-    WriteRegStr HKLM "Software\Clients\Media\VLC\InstallInfo" "ReinstallCommand" "$\"$INSTDIR\spad-setup.exe$\" /Reinstall /S"
-    WriteRegDWORD HKLM "Software\Clients\Media\VLC\InstallInfo" "IconsVisible" 0x001
+    WriteRegStr HKLM "Software\RegisteredApplications" "VLC Redesign 3" "Software\Clients\Media\VLC Redesign 3\Capabilities"
+    WriteRegStr HKLM "Software\Clients\Media\VLC Redesign 3\Capabilities" "ApplicationName" "VLC Redesign"
+    WriteRegStr HKLM "Software\Clients\Media\VLC Redesign 3\Capabilities" "ApplicationDescription" "VLC - The video swiss knife"
+    WriteRegStr HKLM "Software\Clients\Media\VLC Redesign 3" "" "VLC Redesign"
+    WriteRegStr HKLM "Software\Clients\Media\VLC Redesign 3\InstallInfo" "HideIconsCommand" "$\"$INSTDIR\spad-setup.exe$\" /HideIcons /S"
+    WriteRegStr HKLM "Software\Clients\Media\VLC Redesign 3\InstallInfo" "ShowIconsCommand" "$\"$INSTDIR\spad-setup.exe$\" /ShowIcons /S"
+    WriteRegStr HKLM "Software\Clients\Media\VLC Redesign 3\InstallInfo" "ReinstallCommand" "$\"$INSTDIR\spad-setup.exe$\" /Reinstall /S"
+    WriteRegDWORD HKLM "Software\Clients\Media\VLC Redesign 3\InstallInfo" "IconsVisible" 0x001
   ${EndIf}
 ${MementoSectionEnd}
 
 ${MementoSection} "$(Name_Section02a)" SEC02a
   SectionIn 1 2 3
-  CreateDirectory "$SMPROGRAMS\VideoLAN"
-  CreateShortCut "$SMPROGRAMS\VideoLAN\VLC media player.lnk" \
+  CreateDirectory "$SMPROGRAMS\VLC Redesign 3"
+  CreateShortCut "$SMPROGRAMS\VLC Redesign 3\VLC Redesign.lnk" \
     "$INSTDIR\vlc.exe" ""
-  CreateShortCut "$SMPROGRAMS\VideoLAN\VLC media player skinned.lnk" \
+  CreateShortCut "$SMPROGRAMS\VLC Redesign 3\VLC Redesign skinned.lnk" \
     "$INSTDIR\vlc.exe" "-Iskins"
-  CreateShortCut "$SMPROGRAMS\VideoLAN\Documentation.lnk" \
+  CreateShortCut "$SMPROGRAMS\VLC Redesign 3\Documentation.lnk" \
     "$INSTDIR\Documentation.url"
-  CreateShortCut "$SMPROGRAMS\VideoLAN\Release Notes.lnk" \
+  CreateShortCut "$SMPROGRAMS\VLC Redesign 3\Release Notes.lnk" \
     "$INSTDIR\NEWS.txt" ""
-  CreateShortCut "$SMPROGRAMS\VideoLAN\${PRODUCT_GROUP} Website.lnk" \
+  CreateShortCut "$SMPROGRAMS\VLC Redesign 3\${PRODUCT_GROUP} Website.lnk" \
     "$INSTDIR\${PRODUCT_GROUP} Website.url"
-  CreateShortCut "$SMPROGRAMS\VideoLAN\VLC media player - reset preferences and cache files.lnk" \
+  CreateShortCut "$SMPROGRAMS\VLC Redesign 3\VLC Redesign - reset preferences and cache files.lnk" \
     "$INSTDIR\vlc.exe" "--reset-config --reset-plugins-cache vlc://quit"
 ${MementoSectionEnd}
 
 ${MementoSection} "$(Name_Section02b)" SEC02b
   SectionIn 1 2 3
-  CreateShortCut "$DESKTOP\VLC media player.lnk" \
+  CreateShortCut "$DESKTOP\VLC Redesign.lnk" \
     "$INSTDIR\vlc.exe" ""
 ${MementoSectionEnd}
 
@@ -572,7 +590,7 @@ ${Endif}
 
 ReadRegStr $INSTDIR HKLM "${PRODUCT_DIR_REGKEY}" "InstallDir"
 StrCmp $INSTDIR "" 0 WinOk
-StrCpy $INSTDIR "$@PROGRAMFILES@\VideoLAN\VLC"
+StrCpy $INSTDIR "$@PROGRAMFILES@\VLC Redesign 3"
 Goto WinOk
 
 WinTooOld:
@@ -846,8 +864,8 @@ Section "un.$(Name_Section91)" SEC91
   !undef Index
   Delete /REBOOTOK "$INSTDIR\npvlc.dll"
 
-  RMDir "$SMPROGRAMS\VideoLAN"
-  RMDir /r $SMPROGRAMS\VideoLAN
+  RMDir "$SMPROGRAMS\VLC Redesign 3"
+  RMDir /r "$SMPROGRAMS\VLC Redesign 3"
 
   FileOpen $UninstallLog "$INSTDIR\uninstall.log" r
   UninstallLoop:
@@ -867,7 +885,8 @@ Section "un.$(Name_Section91)" SEC91
   Call un.RemoveEmptyDirs
   RMDir "$INSTDIR"
 
-  DeleteRegKey HKLM Software\VideoLAN
+  ; VLC Redesign: only remove our own key, never the official VLC's Software\VideoLAN
+  DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
 
   DeleteRegKey HKCR Applications\vlc.exe
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\vlc.exe"
@@ -888,8 +907,8 @@ Section "un.$(Name_Section91)" SEC91
   DeleteRegValue HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlers\PlayMusicFilesOnArrival" "VLCPlayMusicFilesOnArrival"
   DeleteRegKey HKLM SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\Handlers\VLCPlayMusicFilesOnArrival
 
-  DeleteRegKey HKLM Software\Clients\Media\VLC
-  DeleteRegValue HKLM "Software\RegisteredApplications" "VLC"
+  DeleteRegKey HKLM "Software\Clients\Media\VLC Redesign 3"
+  DeleteRegValue HKLM "Software\RegisteredApplications" "VLC Redesign 3"
   DeleteRegKey HKCR "VLC.MediaFile"
   DeleteRegKey HKCR "VLC.DVDMovie"
   DeleteRegKey HKCR "VLC.CDAudio"
@@ -903,9 +922,9 @@ Section "un.$(Name_Section91)" SEC91
     "SOFTWARE\MozillaPlugins\@videolan.org/vlc,version=${VERSION}"
 
   DeleteRegKey HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\VLC Redesign 3"
 
-  Delete "$DESKTOP\VLC media player.lnk"
+  Delete "$DESKTOP\VLC Redesign.lnk"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"

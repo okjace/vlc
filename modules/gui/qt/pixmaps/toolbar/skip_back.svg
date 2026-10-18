@@ -73,7 +73,7 @@
      transform="translate(-384,-1004.3622)"
      style="display:inline">
     <path
-       style="display:inline;opacity:1;fill:#747474;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:35.43307114;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#D0D0D0;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:35.43307114;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 24 8 A 16 16 0 0 0 8 24 L 3 24 L 11 32 L 19 24 L 14 24 A 10 9.9999962 0 0 1 24 14 A 10 9.9999962 0 0 1 34 24 L 34 28 L 40 28 L 40 24 A 16 16 0 0 0 24 8 z M 8 34 L 8 40 L 14 40 L 14 34 L 8 34 z M 16.666016 34 L 16.666016 40 L 22.666016 40 L 22.666016 34 L 16.666016 34 z M 25.333984 34 L 25.333984 40 L 31.333984 40 L 31.333984 34 L 25.333984 34 z M 34 34 L 34 40 L 40 40 L 40 34 L 34 34 z "
        transform="translate(384,1004.3622)"
        id="path6659-8" />
