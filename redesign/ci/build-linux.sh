@@ -44,7 +44,12 @@ sudo apt-get install -y --no-install-recommends \
     libmpg123-dev libtag1-dev libxml2-dev libgcrypt20-dev libgnutls28-dev \
     libdvdread-dev libdvdnav-dev libbluray-dev libcddb2-dev libcdio-dev \
     libjpeg-dev libpng-dev libarchive-dev libsoxr-dev libsqlite3-dev libxxhash-dev \
-    libfuse2t64 libgl1-mesa-dri libfontconfig1 libxrender1
+    libfuse2t64 libgl1-mesa-dri libfontconfig1 libxrender1 \
+    libxcb-icccm4 libxcb-image0 libxcb-render-util0 libxcb-xinerama0 libxcb-cursor0 \
+    libxcb-shape0 libxcb-sync1 libxcb-xfixes0 libxcb-util1 libxcb-glx0 libxcb-xinput0 \
+    libxcb-randr0 libxcb-keysyms1 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0 \
+    libwayland-client0 libwayland-cursor0 libwayland-egl1 libdecor-0-0 \
+    libopengl0 libegl1 libsm6 libice6 libxext6 libxi6
 endstep
 
 step "Install Qt $QT_VERSION"
@@ -143,6 +148,15 @@ plugin_args=()
 while IFS= read -r so; do
     plugin_args+=(--library "$so")
 done < <(find "$APPDIR/usr/lib/vlc/plugins" -name '*.so')
+
+# fail early (with the full list) if a Qt plugin we deploy has unresolved deps
+missing="$(for so in "$QT_DIR"/plugins/platforms/libqxcb.so "$QT_DIR"/plugins/platforms/libqwayland*.so \
+                     "$QT_DIR"/plugins/xcbglintegrations/*.so "$QT_DIR"/plugins/imageformats/*.so; do
+               [ -f "$so" ] && LD_LIBRARY_PATH="$QT_DIR/lib" ldd "$so" | grep "not found"
+           done | sort -u)"
+if [ -n "$missing" ]; then
+    echo "Qt plugins have unresolved dependencies:"; echo "$missing"; exit 1
+fi
 
 # let linuxdeploy resolve libvlc/libvlccore from the AppDir itself
 export LD_LIBRARY_PATH="$APPDIR/usr/lib:$APPDIR/usr/lib/vlc:$LD_LIBRARY_PATH"
