@@ -10,6 +10,9 @@ export VLC_DATA_PATH="$HERE/usr/share/vlc"
 export VLC_LOCALEDIR="$HERE/usr/share/locale"
 export LD_LIBRARY_PATH="$HERE/usr/lib:$HERE/usr/lib/vlc${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export XDG_DATA_DIRS="$HERE/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+export QT_PLUGIN_PATH="$HERE/usr/plugins"
+export QML_IMPORT_PATH="$HERE/usr/qml"
+export QML2_IMPORT_PATH="$HERE/usr/qml"
 
 # Qt environment prepared by linuxdeploy-plugin-qt
 for hook in "$HERE"/apprun-hooks/*.sh; do

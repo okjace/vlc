@@ -179,6 +179,19 @@ export NO_STRIP=1
     --plugin qt
 endstep
 
+step "Fix up AppDir"
+# --library copied every plugin into usr/lib only so its dependencies got
+# deployed; VLC loads them from usr/lib/vlc/plugins, so drop the copies.
+rm -f "$APPDIR"/usr/lib/*_plugin.so
+find "$APPDIR/usr/lib" -name '*.a' -delete
+# vlc-qt-check (run before the Qt UI starts) lives in libexec and needs its
+# own qt.conf, otherwise it finds no platform plugin and the GUI is skipped.
+sed 's|^Prefix = .*|Prefix = ../../|' "$APPDIR/usr/bin/qt.conf" > "$APPDIR/usr/libexec/vlc/qt.conf"
+# linuxdeploy rewrote the plugins' rpaths, so rebuild the plugin cache
+VLC_LIB_PATH="$APPDIR/usr/lib/vlc" LD_LIBRARY_PATH="$APPDIR/usr/lib:$LD_LIBRARY_PATH" \
+    "$APPDIR/usr/libexec/vlc/vlc-cache-gen" "$APPDIR/usr/lib/vlc/plugins"
+endstep
+
 step "Create AppImage"
 # linuxdeploy can deploy Qt but older glibc-sensitive libs must stay on the host
 for lib in libGL.so.1 libEGL.so.1 libGLX.so.0 libGLdispatch.so.0 libdrm.so.2 libgbm.so.1 \

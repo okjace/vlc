@@ -18,6 +18,10 @@ by [Juxtopposed](https://www.youtube.com/@juxtopposed)**.
 > This project is not affiliated with or endorsed by VideoLAN or Juxtopposed.
 > “VLC” and the cone logo are trademarks of the VideoLAN association.
 
+<p align="center">
+  <img src="redesign/branding/previews/linux-home.png" width="560" alt="VLC Redesign home screen">
+</p>
+
 ## Downloads
 
 Grab the latest installers from **[Releases](../../releases)**:
