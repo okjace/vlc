@@ -140,7 +140,7 @@ if [ -n "$missing" ]; then
 fi
 
 # let linuxdeploy resolve libvlc/libvlccore from the AppDir itself
-export LD_LIBRARY_PATH="$APPDIR/usr/lib:$APPDIR/usr/lib/vlc:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$APPDIR/usr/lib:$APPDIR/usr/lib/vlc${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export QMAKE=/usr/lib/qt5/bin/qmake
 export EXTRA_QT_MODULES="svg"
 export EXTRA_PLATFORM_PLUGINS="libqwayland-generic.so;libqwayland-egl.so;libqoffscreen.so"
@@ -165,7 +165,7 @@ step "Fix up AppDir"
 rm -f "$APPDIR"/usr/lib/*_plugin.so
 find "$APPDIR/usr/lib" -name '*.a' -delete
 # linuxdeploy rewrote the plugins' rpaths, so rebuild the plugin cache
-LD_LIBRARY_PATH="$APPDIR/usr/lib:$LD_LIBRARY_PATH" \
+LD_LIBRARY_PATH="$APPDIR/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
     "$APPDIR/usr/lib/vlc/vlc-cache-gen" "$APPDIR/usr/lib/vlc/plugins"
 endstep
 
