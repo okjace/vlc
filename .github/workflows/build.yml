@@ -28,6 +28,10 @@ on:
         description: 'Publish the builds as a GitHub Release with this tag (leave empty to only build)'
         required: false
         default: ''
+      platforms:
+        description: 'Platforms to build (any of: linux windows macos)'
+        required: false
+        default: 'linux windows macos'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -39,6 +43,7 @@ permissions:
 jobs:
   linux:
     name: Linux x86_64 (AppImage)
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux')
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     steps:
@@ -62,6 +67,7 @@ jobs:
 
   windows:
     name: Windows x86_64 (.exe installer)
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows')
     runs-on: ubuntu-24.04
     timeout-minutes: 240
     container:
@@ -97,6 +103,7 @@ jobs:
 
   macos:
     name: macOS ${{ matrix.arch }} (.app / .dmg)
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'macos')
     strategy:
       fail-fast: false
       matrix:
