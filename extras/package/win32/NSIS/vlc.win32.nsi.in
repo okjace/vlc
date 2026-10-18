@@ -30,7 +30,8 @@
 ManifestDPIAware true
 Unicode true
 
-!define INSTALL_ACTIVEX
+; VLC Redesign: no ActiveX/NPAPI browser plugin (obsolete; its sources are fetched separately)
+; !define INSTALL_ACTIVEX
 
 Var ReinstallType
 Var ReinstallUninstallBtn

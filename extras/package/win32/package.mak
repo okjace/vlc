@@ -92,7 +92,8 @@ package-win-activex: build-npapi
 	mkdir -p "$(win32_destdir)/sdk/activex/"
 	cp $(top_builddir)/npapi-vlc/activex/README.TXT $(top_builddir)/npapi-vlc/share/test/test.html $(win32_destdir)/sdk/activex/
 
-package-win-strip: package-win-common package-win-activex
+# VLC Redesign: the ActiveX plugin is not shipped (see vlc.win32.nsi.in)
+package-win-strip: package-win-common
 	mkdir -p "$(win32_debugdir)"/
 	find $(win32_destdir) -type f \( -name '*$(LIBEXT)' -or -name '*$(EXEEXT)' \) | while read i; \
 	do if test -n "$$i" ; then \
