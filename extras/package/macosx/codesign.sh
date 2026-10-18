@@ -110,9 +110,12 @@ find VLC.app/Contents/Frameworks -type f -name "*.txt" -exec rm '{}' \;
 
 info "Signing frameworks"
 
-sign "VLC.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate"
-sign "VLC.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app"
-sign "VLC.app/Contents/Frameworks/Sparkle.framework/"
+# Sparkle is absent when built with --disable-sparkle (VLC Redesign)
+if [ -e "VLC.app/Contents/Frameworks/Sparkle.framework" ]; then
+    sign "VLC.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate"
+    sign "VLC.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app"
+    sign "VLC.app/Contents/Frameworks/Sparkle.framework/"
+fi
 
 if [ -e "VLC.app/Contents/Frameworks/Breakpad.framework" ]; then
     sign "VLC.app/Contents/Frameworks/Breakpad.framework/Resources/breakpadUtilities.dylib"
@@ -159,10 +162,10 @@ if [ -e "VLC.app/Contents/Frameworks/Breakpad.framework" ]; then
     codesign --verify -vv VLC.app/Contents/Frameworks/Breakpad.framework
 fi
 
-codesign --verify -vv VLC.app/Contents/Frameworks/Sparkle.framework
+[ -e VLC.app/Contents/Frameworks/Sparkle.framework ] && codesign --verify -vv VLC.app/Contents/Frameworks/Sparkle.framework || true
 
 info "Validating autoupdate app"
-codesign --verify -vv VLC.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app
+[ -e VLC.app/Contents/Frameworks/Sparkle.framework ] && codesign --verify -vv VLC.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app || true
 
 info "Validating complete bundle"
 codesign --verify --deep --strict --verbose=4 VLC.app

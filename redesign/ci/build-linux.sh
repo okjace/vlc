@@ -152,7 +152,8 @@ done < <(find "$APPDIR/usr/lib/vlc/plugins" -name '*.so')
 # fail early (with the full list) if a Qt plugin we deploy has unresolved deps
 missing="$(for so in "$QT_DIR"/plugins/platforms/libqxcb.so "$QT_DIR"/plugins/platforms/libqwayland*.so \
                      "$QT_DIR"/plugins/xcbglintegrations/*.so "$QT_DIR"/plugins/imageformats/*.so; do
-               [ -f "$so" ] && LD_LIBRARY_PATH="$QT_DIR/lib" ldd "$so" | grep "not found"
+               [ -f "$so" ] || continue
+               LD_LIBRARY_PATH="$QT_DIR/lib" ldd "$so" | grep "not found" || true
            done | sort -u)"
 if [ -n "$missing" ]; then
     echo "Qt plugins have unresolved dependencies:"; echo "$missing"; exit 1
