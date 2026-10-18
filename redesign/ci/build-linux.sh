@@ -107,8 +107,7 @@ make install DESTDIR="$APPDIR"
 # headers, static archives and libtool files are not needed at runtime
 rm -rf "$APPDIR/usr/include" "$APPDIR/usr/lib/pkgconfig"
 find "$APPDIR" -name '*.la' -delete
-# pre-generate the plugin cache so the first launch is fast
-"$APPDIR/usr/lib/vlc/vlc-cache-gen" "$APPDIR/usr/lib/vlc/plugins" || true
+# (make install already generated the plugin cache via vlc-cache-gen)
 VERSION="$(sed -n 's/^#define PACKAGE_VERSION "\(.*\)"/\1/p' config.h)"
 endstep
 
@@ -145,6 +144,8 @@ while IFS= read -r so; do
     plugin_args+=(--library "$so")
 done < <(find "$APPDIR/usr/lib/vlc/plugins" -name '*.so')
 
+# let linuxdeploy resolve libvlc/libvlccore from the AppDir itself
+export LD_LIBRARY_PATH="$APPDIR/usr/lib:$APPDIR/usr/lib/vlc:$LD_LIBRARY_PATH"
 export QMAKE="$QT_DIR/bin/qmake"
 export QML_SOURCES_PATHS="$SRC_DIR/modules/gui/qt"
 export EXTRA_QT_MODULES="waylandcompositor;svg"
