@@ -82,6 +82,14 @@ static NSString *const kVLCRedesignAppName = @"VLC Redesign.app";
     }
 }
 
+/* Move to the Trash where available (macOS 10.8+); VLC 3 still targets 10.7. */
++ (BOOL)trash:(NSURL *)url error:(NSError **)error
+{
+    if (@available(macOS 10.8, *))
+        return [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:error];
+    return [[NSFileManager defaultManager] removeItemAtURL:url error:error];
+}
+
 + (NSButton *)checkbox:(NSString *)title state:(BOOL)on y:(CGFloat)y
 {
     NSButton *box = [[NSButton alloc] initWithFrame:NSMakeRect(0, y, 380, 22)];
@@ -154,7 +162,7 @@ static NSString *const kVLCRedesignAppName = @"VLC Redesign.app";
 
     NSError *error = nil;
     [fm createDirectoryAtPath:targetDir withIntermediateDirectories:YES attributes:nil error:nil];
-    if (upgrade && ![fm trashItemAtURL:[NSURL fileURLWithPath:target] resultingItemURL:nil error:&error]
+    if (upgrade && ![self trash:[NSURL fileURLWithPath:target] error:&error]
         && ![fm removeItemAtPath:target error:&error]) {
         [self showError:[NSString stringWithFormat:@"The old copy at %@ couldn't be replaced: %@",
                          target, [error localizedDescription]]];
@@ -193,7 +201,7 @@ static NSString *const kVLCRedesignAppName = @"VLC Redesign.app";
     }
 
     if ([trash state] == NSOnState)
-        [fm trashItemAtURL:source resultingItemURL:nil error:nil];
+        [self trash:source error:nil];
 
     /* start the installed copy and let the caller quit this one */
     if ([self run:@"/usr/bin/open" arguments:@[@"-n", target]] != 0) {
