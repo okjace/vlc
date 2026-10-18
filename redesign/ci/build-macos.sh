@@ -25,7 +25,9 @@ mkdir -p "$BUILD_DIR" "$OUT_DIR"
 echo "::group::Build VLC ($ARCH)"
 cd "$BUILD_DIR"
 # No Sparkle: it would "update" this fork to the official VLC.
-export VLC_CONFIGURE_ARGS="${VLC_CONFIGURE_ARGS:-} --disable-sparkle"
+# No ncurses: a terminal UI is useless in the .app, and the prebuilt ncurses
+# references the SDK path of VideoLAN's build machine, which breaks linking.
+export VLC_CONFIGURE_ARGS="${VLC_CONFIGURE_ARGS:-} --disable-sparkle --disable-ncurses"
 "$SRC_DIR/extras/package/macosx/build.sh" -d -a "$VLC_ARCH" -j "$JOBS"
 echo "::endgroup::"
 
