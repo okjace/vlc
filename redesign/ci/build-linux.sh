@@ -212,12 +212,9 @@ for lib in libGL.so.1 libEGL.so.1 libGLX.so.0 libGLdispatch.so.0 libdrm.so.2 lib
 done
 VERSION="$VERSION" ARCH=x86_64 ./appimagetool-x86_64.AppImage --no-appstream \
     "$APPDIR" "$OUT_DIR/VLC-Redesign-$VERSION-Linux-x86_64.AppImage"
-# Clear the AppImage magic bytes ("AI\x02" at offset 8). AppImageLauncher hooks
-# every file carrying them through binfmt_misc and aborts on Wayland desktops
-# without qt5-wayland (niri, Sway, Hyprland), so the AppImage "wouldn't open".
-# Without them the kernel runs the file as a normal executable; the AppImage
-# runtime itself doesn't need them.
-printf '\000\000\000' | dd of="$OUT_DIR/VLC-Redesign-$VERSION-Linux-x86_64.AppImage" \
-    bs=1 seek=8 count=3 conv=notrunc status=none
+# Keep the AppImage magic bytes: Nautilus and other file managers open
+# *.AppImage files with AppImageLauncher when it's installed, and it only
+# accepts files that carry them (same as Jace Launcher's AppImage). Our own
+# launchers start the installed copy with APPIMAGELAUNCHER_DISABLE=1.
 ls -la "$OUT_DIR"
 endstep
